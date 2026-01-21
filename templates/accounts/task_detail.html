@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ task.title }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <span>{{ task.title }}</span>
+        <a href="{% url 'task_edit' task.pk %}" class="btn btn-sm">Edytuj</a>
+    </div>
+    <p>{{ task.description }}</p>
+    <div class="grid grid-2">
+        <div>
+            <p><strong>Projekt:</strong> <a href="{% url 'project_detail' task.project.pk %}">{{ task.project.name }}</a></p>
+            <p><strong>Status:</strong>
+                {% if task.status == 'done' %}
+                <span class="badge badge-success">{{ task.get_status_display }}</span>
+                {% elif task.status == 'in_progress' %}
+                <span class="badge badge-warning">{{ task.get_status_display }}</span>
+                {% else %}
+                <span class="badge badge-secondary">{{ task.get_status_display }}</span>
+                {% endif %}
+            </p>
+            <p><strong>Priorytet:</strong>
+                {% if task.priority == 'high' %}
+                <span class="badge badge-danger">{{ task.get_priority_display }}</span>
+                {% elif task.priority == 'medium' %}
+                <span class="badge badge-warning">{{ task.get_priority_display }}</span>
+                {% else %}
+                <span class="badge badge-success">{{ task.get_priority_display }}</span>
+                {% endif %}
+            </p>
+        </div>
+        <div>
+            <p><strong>Utworzone przez:</strong> {{ task.created_by.username }}</p>
+            <p><strong>Przypisane do:</strong>
+                {% if task.assigned_to %}
+                    {% if task.assigned_to.profile.avatar %}
+                    <img src="{{ task.assigned_to.profile.avatar.url }}" class="avatar-small" alt="{{ task.assigned_to.username }}">
+                    {% endif %}
+                    {{ task.assigned_to.username }}
+                {% else %}
+                    <span class="muted">Nie przypisano</span>
+                {% endif %}
+            </p>
+            {% if task.due_date %}
+            <p><strong>Termin:</strong> {{ task.due_date|date:"Y-m-d" }}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="grid grid-2">
+    <div class="card">
+        <div class="card-header">Komentarze</div>
+        {% for comment in task.comments.all %}
+        <div class="card">
+            <div>
+                {% if comment.author.profile.avatar %}
+                <img src="{{ comment.author.profile.avatar.url }}" class="avatar-small" alt="{{ comment.author.username }}">
+                {% endif %}
+                <strong>{{ comment.author.username }}</strong>
+                <span class="muted">{{ comment.created_at|date:"Y-m-d H:i" }}</span>
+            </div>
+            <p>{{ comment.content }}</p>
+        </div>
+        {% empty %}
+        <p class="muted">Brak komentarzy</p>
+        {% endfor %}
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ comment_form.content }}
+            </div>
+            <button type="submit" name="comment_submit" class="btn">Dodaj komentarz</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <div class="card-header">Załączniki</div>
+        {% if task.attachments.all %}
+        <ul>
+            {% for attachment in task.attachments.all %}
+            <li>
+                <a href="{{ attachment.file.url }}" target="_blank">{{ attachment.file.name|slice:"12:" }}</a>
+                <div class="muted">{{ attachment.uploaded_by.username }} - {{ attachment.created_at|date:"Y-m-d" }}</div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">{{ attachment_form.file }}</div>
+            <button type="submit" name="attachment_submit" class="btn btn-sm">Dodaj załącznik</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}System Zarządzania Projektami{% endblock %}</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+        }
+        a { color: #0a58ca; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 16px; }
+
+        .nav {
+            background: #1e3a8a;
+            color: #fff;
+        }
+        .nav a { color: #fff; }
+        .nav-inner {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-links, .nav-user { display: flex; gap: 12px; align-items: center; }
+        .brand { font-weight: bold; }
+
+        .card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+
+        .grid { display: grid; gap: 16px; }
+        .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid transparent;
+            background: #2563eb;
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .btn-secondary { background: #6b7280; }
+        .btn-link { background: transparent; color: #0a58ca; padding: 0; border: none; }
+        .btn-sm { padding: 4px 8px; font-size: 12px; }
+
+        .badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 12px; background: #e5e7eb; }
+        .badge-success { background: #16a34a; color: #fff; }
+        .badge-warning { background: #f59e0b; color: #fff; }
+        .badge-danger { background: #dc2626; color: #fff; }
+        .badge-secondary { background: #6b7280; color: #fff; }
+
+        .alert { padding: 10px; border-radius: 4px; margin-bottom: 8px; border: 1px solid transparent; }
+        .alert-success { background: #dcfce7; border-color: #86efac; color: #166534; }
+        .alert-error { background: #fee2e2; border-color: #fecaca; color: #991b1b; }
+        .alert-info { background: #dbeafe; border-color: #bfdbfe; color: #1e3a8a; }
+        .alert-warning { background: #fef3c7; border-color: #fde68a; color: #92400e; }
+
+        .form-group { margin-bottom: 12px; }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font: inherit;
+        }
+        textarea { min-height: 80px; }
+        .muted { color: #6b7280; }
+
+        ul { list-style: none; padding: 0; margin: 0; }
+        li { margin-bottom: 8px; }
+
+        .task-card { margin-bottom: 10px; cursor: pointer; border-left: 4px solid #e5e7eb; }
+        .priority-high { border-left-color: #dc2626; }
+        .priority-medium { border-left-color: #f59e0b; }
+        .priority-low { border-left-color: #16a34a; }
+        .kanban-column { background: #f8fafc; padding: 12px; border-radius: 6px; min-height: 300px; }
+
+        .avatar-small { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
+        .avatar-medium { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+
+        @media (max-width: 800px) {
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .nav-inner { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+    <header class="nav">
+        <div class="container nav-inner">
+            <a class="brand" href="{% url 'dashboard' %}">Zarządzanie Projektami</a>
+            {% if user.is_authenticated %}
+            <nav class="nav-links">
+                <a href="{% url 'dashboard' %}">Dashboard</a>
+                <a href="{% url 'team_list' %}">Zespoły</a>
+                <a href="{% url 'profile' %}">Profil</a>
+            </nav>
+            {% endif %}
+            <div class="nav-user">
+                {% if user.is_authenticated %}
+                    <span>
+                        {% if user.profile.avatar %}
+                        <img src="{{ user.profile.avatar.url }}" class="avatar-small" alt="{{ user.username }}">
+                        {% endif %}
+                        {{ user.username }}
+                    </span>
+                    <a href="{% url 'logout' %}">Wyloguj</a>
+                {% else %}
+                    <a href="{% url 'login' %}">Zaloguj</a>
+                    <a href="{% url 'register' %}">Rejestracja</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

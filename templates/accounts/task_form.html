@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if task %}Edytuj zadanie{% else %}Nowe zadanie{% endif %}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">{% if task %}Edytuj zadanie{% else %}Nowe zadanie w projekcie: {{ project.name }}{% endif %}</div>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_title">Tytuł</label>
+            {{ form.title }}
+            {% if form.title.errors %}
+            <div class="alert alert-error">{{ form.title.errors }}</div>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            <label for="id_description">Opis</label>
+            {{ form.description }}
+            {% if form.description.errors %}
+            <div class="alert alert-error">{{ form.description.errors }}</div>
+            {% endif %}
+        </div>
+        <div class="grid grid-2">
+            <div class="form-group">
+                <label for="id_assigned_to">Przypisz do</label>
+                {{ form.assigned_to }}
+                {% if form.assigned_to.errors %}
+                <div class="alert alert-error">{{ form.assigned_to.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="id_priority">Priorytet</label>
+                {{ form.priority }}
+                {% if form.priority.errors %}
+                <div class="alert alert-error">{{ form.priority.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="grid grid-2">
+            <div class="form-group">
+                <label for="id_status">Status</label>
+                {{ form.status }}
+                {% if form.status.errors %}
+                <div class="alert alert-error">{{ form.status.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="id_due_date">Termin</label>
+                {{ form.due_date }}
+                {% if form.due_date.errors %}
+                <div class="alert alert-error">{{ form.due_date.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+        <button type="submit" class="btn">{% if task %}Zapisz{% else %}Utwórz{% endif %}</button>
+        <a href="{% if task %}{% url 'task_detail' task.pk %}{% else %}{% url 'project_detail' project.pk %}{% endif %}" class="btn btn-secondary">Anuluj</a>
+    </form>
+</div>
+{% endblock %}

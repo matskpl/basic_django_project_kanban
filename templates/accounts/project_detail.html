@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ project.name }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <span>{{ project.name }}</span>
+        <a href="{% url 'task_create' project.pk %}" class="btn btn-sm">+ Nowe zadanie</a>
+    </div>
+    <p class="muted">{{ project.description }}</p>
+    <p><strong>Zespół:</strong> <a href="{% url 'team_detail' project.team.pk %}">{{ project.team.name }}</a></p>
+</div>
+
+<div class="grid grid-3">
+    <div class="kanban-column">
+        <h4>To Do</h4>
+        {% for task in tasks_by_status.todo %}
+        <div class="card task-card priority-{{ task.priority }}" onclick="window.location='{% url 'task_detail' task.pk %}'">
+            <strong>{{ task.title }}</strong>
+            <div class="muted">{{ task.description|truncatewords:10 }}</div>
+            <div>
+                {% if task.priority == 'high' %}
+                <span class="badge badge-danger">{{ task.get_priority_display }}</span>
+                {% elif task.priority == 'medium' %}
+                <span class="badge badge-warning">{{ task.get_priority_display }}</span>
+                {% else %}
+                <span class="badge badge-success">{{ task.get_priority_display }}</span>
+                {% endif %}
+                {% if task.assigned_to %}
+                <span class="muted">
+                    {% if task.assigned_to.profile.avatar %}
+                    <img src="{{ task.assigned_to.profile.avatar.url }}" class="avatar-small" alt="{{ task.assigned_to.username }}">
+                    {% endif %}
+                    {{ task.assigned_to.username }}
+                </span>
+                {% endif %}
+            </div>
+            {% if task.due_date %}
+            <div class="muted">{{ task.due_date|date:"Y-m-d" }}</div>
+            {% endif %}
+        </div>
+        {% empty %}
+        <p class="muted">Brak zadań</p>
+        {% endfor %}
+    </div>
+
+    <div class="kanban-column">
+        <h4>In Progress</h4>
+        {% for task in tasks_by_status.in_progress %}
+        <div class="card task-card priority-{{ task.priority }}" onclick="window.location='{% url 'task_detail' task.pk %}'">
+            <strong>{{ task.title }}</strong>
+            <div class="muted">{{ task.description|truncatewords:10 }}</div>
+            <div>
+                {% if task.priority == 'high' %}
+                <span class="badge badge-danger">{{ task.get_priority_display }}</span>
+                {% elif task.priority == 'medium' %}
+                <span class="badge badge-warning">{{ task.get_priority_display }}</span>
+                {% else %}
+                <span class="badge badge-success">{{ task.get_priority_display }}</span>
+                {% endif %}
+                {% if task.assigned_to %}
+                <span class="muted">
+                    {% if task.assigned_to.profile.avatar %}
+                    <img src="{{ task.assigned_to.profile.avatar.url }}" class="avatar-small" alt="{{ task.assigned_to.username }}">
+                    {% endif %}
+                    {{ task.assigned_to.username }}
+                </span>
+                {% endif %}
+            </div>
+            {% if task.due_date %}
+            <div class="muted">{{ task.due_date|date:"Y-m-d" }}</div>
+            {% endif %}
+        </div>
+        {% empty %}
+        <p class="muted">Brak zadań</p>
+        {% endfor %}
+    </div>
+
+    <div class="kanban-column">
+        <h4>Done</h4>
+        {% for task in tasks_by_status.done %}
+        <div class="card task-card priority-{{ task.priority }}" onclick="window.location='{% url 'task_detail' task.pk %}'">
+            <strong>{{ task.title }}</strong>
+            <div class="muted">{{ task.description|truncatewords:10 }}</div>
+            <div>
+                {% if task.priority == 'high' %}
+                <span class="badge badge-danger">{{ task.get_priority_display }}</span>
+                {% elif task.priority == 'medium' %}
+                <span class="badge badge-warning">{{ task.get_priority_display }}</span>
+                {% else %}
+                <span class="badge badge-success">{{ task.get_priority_display }}</span>
+                {% endif %}
+                {% if task.assigned_to %}
+                <span class="muted">
+                    {% if task.assigned_to.profile.avatar %}
+                    <img src="{{ task.assigned_to.profile.avatar.url }}" class="avatar-small" alt="{{ task.assigned_to.username }}">
+                    {% endif %}
+                    {{ task.assigned_to.username }}
+                </span>
+                {% endif %}
+            </div>
+            {% if task.due_date %}
+            <div class="muted">{{ task.due_date|date:"Y-m-d" }}</div>
+            {% endif %}
+        </div>
+        {% empty %}
+        <p class="muted">Brak zadań</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

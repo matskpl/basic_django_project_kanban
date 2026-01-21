@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Zespoły{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <span>Moje Zespoły</span>
+        <a href="{% url 'team_create' %}" class="btn btn-sm">Utwórz nowy zespół</a>
+    </div>
+    {% if teams %}
+    <ul>
+        {% for team in teams %}
+        <li>
+            <a href="{% url 'team_detail' team.pk %}">{{ team.name }}</a>
+            {% if team.owner == user %}
+            <span class="badge badge-success">Właściciel</span>
+            {% endif %}
+            <div class="muted">{{ team.member_count }} członków | {{ team.project_count }} projektów</div>
+            <div class="muted">{{ team.description|truncatewords:20 }}</div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="muted">Nie należysz do żadnego zespołu. Utwórz nowy!</p>
+    {% endif %}
+</div>
+{% endblock %}

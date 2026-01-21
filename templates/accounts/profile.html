@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Mój Profil{% endblock %}
+
+{% block content %}
+<div class="grid grid-2">
+    <div class="card">
+        <div class="card-header">Edytuj Profil</div>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_username">Nazwa użytkownika</label>
+                {{ form.username }}
+            </div>
+            <div class="form-group">
+                <label for="id_email">Email</label>
+                {{ form.email }}
+            </div>
+            <div class="form-group">
+                <label for="id_bio">O mnie</label>
+                {{ form.bio }}
+            </div>
+            <div class="form-group">
+                <label for="id_avatar">Avatar</label>
+                {% if profile.avatar %}
+                <div>
+                    <img src="{{ profile.avatar.url }}" class="avatar-medium" alt="Avatar">
+                </div>
+                {% endif %}
+                {{ form.avatar }}
+            </div>
+            <button type="submit" class="btn">Zapisz zmiany</button>
+        </form>
+    </div>
+    <div class="card">
+        <div class="card-header">Podgląd</div>
+        {% if profile.avatar %}
+        <img src="{{ profile.avatar.url }}" class="avatar-medium" alt="{{ user.username }}">
+        {% endif %}
+        <h3>{{ user.username }}</h3>
+        <p class="muted">{{ user.email }}</p>
+        <p>{{ profile.bio }}</p>
+    </div>
+</div>
+{% endblock %}

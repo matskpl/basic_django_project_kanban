@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h2>Witaj, {{ user.username }}!</h2>
+
+<div class="grid grid-2">
+    <div class="card">
+        <div class="card-header">Moje pilne zadania</div>
+        {% if urgent_tasks %}
+        <ul>
+            {% for task in urgent_tasks %}
+            <li class="task-card priority-{{ task.priority }}">
+                <a href="{% url 'task_detail' task.pk %}">{{ task.title }}</a>
+                <div class="muted">{{ task.project.name }}</div>
+                <div>
+                    {% if task.status == 'todo' %}
+                    <span class="badge badge-secondary">{{ task.get_status_display }}</span>
+                    {% else %}
+                    <span class="badge badge-warning">{{ task.get_status_display }}</span>
+                    {% endif %}
+                    {% if task.due_date %}
+                    <span class="muted">Termin: {{ task.due_date|date:"Y-m-d" }}</span>
+                    {% endif %}
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="muted">Brak pilnych zadań</p>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <span>Moje Zespoły</span>
+            <a href="{% url 'team_create' %}" class="btn btn-sm">+ Nowy</a>
+        </div>
+        {% if teams %}
+        <ul>
+            {% for team in teams %}
+            <li>
+                <a href="{% url 'team_detail' team.pk %}">{{ team.name }}</a>
+                {% if team.owner == user %}
+                <span class="badge badge-success">Właściciel</span>
+                {% endif %}
+                <div class="muted">{{ team.members.count }} członków</div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="muted">Nie należysz do żadnego zespołu</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

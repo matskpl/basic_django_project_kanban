@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ team.name }}{% endblock %}
+
+{% block content %}
+<h2>{{ team.name }}</h2>
+<p class="muted">{{ team.description }}</p>
+
+<div class="grid grid-2">
+    <div class="card">
+        <div class="card-header">
+            <span>Projekty</span>
+            <a href="{% url 'project_create' team.pk %}" class="btn btn-sm">+ Nowy projekt</a>
+        </div>
+        {% if projects %}
+        <ul>
+            {% for project in projects %}
+            <li>
+                <a href="{% url 'project_detail' project.pk %}">{{ project.name }}</a>
+                <div class="muted">{{ project.tasks.count }} zadań</div>
+                <div class="muted">{{ project.description|truncatewords:15 }}</div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="muted">Brak projektów w tym zespole</p>
+        {% endif %}
+    </div>
+
+    <div>
+        <div class="card">
+            <div class="card-header">Członkowie zespołu</div>
+            <ul>
+                {% for member in team.members.all %}
+                <li>
+                    {% if member.profile.avatar %}
+                    <img src="{{ member.profile.avatar.url }}" class="avatar-small" alt="{{ member.username }}">
+                    {% endif %}
+                    {{ member.username }}
+                    {% if member == team.owner %}
+                    <span class="badge badge-success">Właściciel</span>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        {% if user == team.owner and form %}
+        <div class="card">
+            <div class="card-header">Dodaj członka</div>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.name.as_hidden }}
+                {{ form.description.as_hidden }}
+                <div class="form-group">
+                    {{ form.add_member }}
+                    <div class="muted">Login lub email</div>
+                    {% if form.add_member.errors %}
+                    <div class="alert alert-error">{{ form.add_member.errors }}</div>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn btn-sm">Dodaj</button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

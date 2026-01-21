@@ -1,0 +1,6 @@
+[tool.ruff]
+line-length = 88
+exclude = ["media", "static"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
