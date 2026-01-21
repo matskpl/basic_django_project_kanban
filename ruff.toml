@@ -1,6 +1,8 @@
-[tool.ruff]
 line-length = 88
 exclude = ["media", "static"]
+extend-ignore = ["E501"]
 
-[tool.ruff.lint.per-file-ignores]
+[per-file-ignores]
 "__init__.py" = ["F401"]
+"**/migrations/*.py" = ["E501"]
+"myproject/settings.py" = ["E402"]

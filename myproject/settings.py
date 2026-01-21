@@ -1,4 +1,5 @@
 from pathlib import Path
+from datetime import timedelta
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '8)&ho-cp9y4aw&92%6@b_a*9hn2ge&jq0&4)_zelm1odz4x=c@'
 DATABASES = {
@@ -103,8 +104,6 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
 }
-
-from datetime import timedelta
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
