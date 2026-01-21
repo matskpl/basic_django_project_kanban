@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load form_tags %}
 
 {% block title %}{% if task %}Edytuj zadanie{% else %}Nowe zadanie{% endif %}{% endblock %}
 
@@ -9,14 +10,14 @@
         {% csrf_token %}
         <div class="form-group">
             <label for="id_title">Tytuł</label>
-            {{ form.title }}
+            {{ form.title|add_class:"form-control" }}
             {% if form.title.errors %}
             <div class="alert alert-error">{{ form.title.errors }}</div>
             {% endif %}
         </div>
         <div class="form-group">
             <label for="id_description">Opis</label>
-            {{ form.description }}
+            {{ form.description|add_class:"form-control" }}
             {% if form.description.errors %}
             <div class="alert alert-error">{{ form.description.errors }}</div>
             {% endif %}
@@ -24,14 +25,14 @@
         <div class="grid grid-2">
             <div class="form-group">
                 <label for="id_assigned_to">Przypisz do</label>
-                {{ form.assigned_to }}
+                {{ form.assigned_to|add_class:"form-control" }}
                 {% if form.assigned_to.errors %}
                 <div class="alert alert-error">{{ form.assigned_to.errors }}</div>
                 {% endif %}
             </div>
             <div class="form-group">
                 <label for="id_priority">Priorytet</label>
-                {{ form.priority }}
+                {{ form.priority|add_class:"form-control" }}
                 {% if form.priority.errors %}
                 <div class="alert alert-error">{{ form.priority.errors }}</div>
                 {% endif %}
@@ -40,14 +41,14 @@
         <div class="grid grid-2">
             <div class="form-group">
                 <label for="id_status">Status</label>
-                {{ form.status }}
+                {{ form.status|add_class:"form-control" }}
                 {% if form.status.errors %}
                 <div class="alert alert-error">{{ form.status.errors }}</div>
                 {% endif %}
             </div>
             <div class="form-group">
                 <label for="id_due_date">Termin</label>
-                {{ form.due_date }}
+                {{ form.due_date|add_class:"form-control" }}
                 {% if form.due_date.errors %}
                 <div class="alert alert-error">{{ form.due_date.errors }}</div>
                 {% endif %}

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load form_tags %}
 
 {% block title %}{{ task.title }}{% endblock %}
 
@@ -71,7 +72,7 @@
         <form method="post">
             {% csrf_token %}
             <div class="form-group">
-                {{ comment_form.content }}
+                {{ comment_form.content|add_class:"form-control" }}
             </div>
             <button type="submit" name="comment_submit" class="btn">Dodaj komentarz</button>
         </form>
@@ -91,7 +92,7 @@
         {% endif %}
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <div class="form-group">{{ attachment_form.file }}</div>
+            <div class="form-group">{{ attachment_form.file|add_class:"form-control" }}</div>
             <button type="submit" name="attachment_submit" class="btn btn-sm">Dodaj załącznik</button>
         </form>
     </div>

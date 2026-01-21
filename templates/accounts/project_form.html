@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load form_tags %}
 
 {% block title %}Nowy projekt{% endblock %}
 
@@ -9,14 +10,14 @@
         {% csrf_token %}
         <div class="form-group">
             <label for="id_name">Nazwa projektu</label>
-            {{ form.name }}
+            {{ form.name|add_class:"form-control" }}
             {% if form.name.errors %}
             <div class="alert alert-error">{{ form.name.errors }}</div>
             {% endif %}
         </div>
         <div class="form-group">
             <label for="id_description">Opis</label>
-            {{ form.description }}
+            {{ form.description|add_class:"form-control" }}
             {% if form.description.errors %}
             <div class="alert alert-error">{{ form.description.errors }}</div>
             {% endif %}

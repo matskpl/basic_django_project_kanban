@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load form_tags %}
 
 {% block title %}Rejestracja{% endblock %}
 
@@ -9,28 +10,28 @@
         {% csrf_token %}
         <div class="form-group">
             <label for="id_username">Nazwa użytkownika</label>
-            {{ form.username }}
+            {{ form.username|add_class:"form-control" }}
             {% if form.username.errors %}
             <div class="alert alert-error">{{ form.username.errors }}</div>
             {% endif %}
         </div>
         <div class="form-group">
             <label for="id_email">Email</label>
-            {{ form.email }}
+            {{ form.email|add_class:"form-control" }}
             {% if form.email.errors %}
             <div class="alert alert-error">{{ form.email.errors }}</div>
             {% endif %}
         </div>
         <div class="form-group">
             <label for="id_password1">Hasło</label>
-            {{ form.password1 }}
+            {{ form.password1|add_class:"form-control" }}
             {% if form.password1.errors %}
             <div class="alert alert-error">{{ form.password1.errors }}</div>
             {% endif %}
         </div>
         <div class="form-group">
             <label for="id_password2">Potwierdź hasło</label>
-            {{ form.password2 }}
+            {{ form.password2|add_class:"form-control" }}
             {% if form.password2.errors %}
             <div class="alert alert-error">{{ form.password2.errors }}</div>
             {% endif %}

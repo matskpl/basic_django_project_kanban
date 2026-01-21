@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load form_tags %}
 
 {% block title %}Mój Profil{% endblock %}
 
@@ -10,24 +11,24 @@
             {% csrf_token %}
             <div class="form-group">
                 <label for="id_username">Nazwa użytkownika</label>
-                {{ form.username }}
+                {{ form.username|add_class:"form-control" }}
             </div>
             <div class="form-group">
                 <label for="id_email">Email</label>
-                {{ form.email }}
+                {{ form.email|add_class:"form-control" }}
             </div>
             <div class="form-group">
                 <label for="id_bio">O mnie</label>
-                {{ form.bio }}
+                {{ form.bio|add_class:"form-control" }}
             </div>
             <div class="form-group">
                 <label for="id_avatar">Avatar</label>
                 {% if profile.avatar %}
                 <div>
-                    <img src="{{ profile.avatar.url }}" class="avatar-medium" alt="Avatar">
+                    <img src="{{ profile.avatar.url }}" class="avatar-large" alt="Avatar">
                 </div>
                 {% endif %}
-                {{ form.avatar }}
+                {{ form.avatar|add_class:"form-control" }}
             </div>
             <button type="submit" class="btn">Zapisz zmiany</button>
         </form>
@@ -35,7 +36,7 @@
     <div class="card">
         <div class="card-header">Podgląd</div>
         {% if profile.avatar %}
-        <img src="{{ profile.avatar.url }}" class="avatar-medium" alt="{{ user.username }}">
+        <img src="{{ profile.avatar.url }}" class="avatar-preview" alt="{{ user.username }}">
         {% endif %}
         <h3>{{ user.username }}</h3>
         <p class="muted">{{ user.email }}</p>
