@@ -57,6 +57,10 @@ class ProjectAccessTests(TestCase):
         self.client.login(username='user2', password='pass123')
         response = self.client.get(reverse('project_detail', kwargs={'pk': self.project.pk}))
         self.assertEqual(response.status_code, 404)
+    def test_user_can_access_own_team_project(self):
+        self.client.login(username='user1', password='pass123')
+        response = self.client.get(reverse('project_detail', kwargs={'pk': self.project.pk}))
+        self.assertEqual(response.status_code, 200)
 
 class TaskAccessTests(TestCase):
     def setUp(self):
